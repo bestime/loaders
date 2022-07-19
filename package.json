@@ -10,7 +10,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bestime/tool.git"
+    "url": "git+https://github.com/bestime/loaders.git"
   },
   "dependencies": {
     "loader-utils": "^2.0.0"
