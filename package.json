@@ -1,0 +1,25 @@
+{
+  "name": "@bestime/url-replace-loader",
+  "version": "1.0.1",
+  "main": "index.js",
+  "description": "自定义url-replace-loader",
+  "files": [
+    "index.js"
+  ],
+  "author": "bestime1020@gmail.com",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bestime/tool.git"
+  },
+  "dependencies": {
+    "loader-utils": "^2.0.0"
+  },
+  "devDependencies": {
+    
+  },
+  "keywords": [
+    
+  ],
+  "homepage": "https://github.com/bestime/loaders.git"
+}
