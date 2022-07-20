@@ -1,22 +1,37 @@
-
-
 var _loaderUtils = require("loader-utils");
+var colorText = require("./utils/colorText")
 
-const cssRules = [
-  /(url\s?\(\s?')(.*?)('\s?\))/gi,
-  /(url\s?\(\s?")(.*?)("\s?\))/gi,
-  /(url\s?\(\s?)(.*?)(\s?\))/gi
+
+var cssRules = [
+  {
+    name: '单引号CSS',
+    reg: /(url\s?\(\s?')(.*?)('\s?\))/gi
+  },
+  {
+    name: '双引号CSS',
+    reg: /(url\s?\(\s?")(.*?)("\s?\))/gi
+  },
+  {
+    name: '无引号CSS',
+    reg: /(url\s?\(\s?)([^"']*?)(\s?\))/gi
+  }
 ]
 
-const tagRules = [
-  /(<img.* [^:]src="\s?)(.*?)(".*?\/\>)/gi,
-  /(<img.* [^:]src='\s?)(.*?)('.*?\/\>)/gi
+var tagRules = [
+  {
+    name: '双引号IMAGE',
+    reg: /(<img.* src\s?=\s?"\s?)(.*?)(".*?\/\>)/gi
+  },
+  {
+    name: '单引号IMAGE',
+    reg: /(<img.* src\s?=\s?'\s?)(.*?)('.*?\/\>)/gi
+  }
 ]
 
 function urlFind (ruleList, data, callback) {
-  ruleList.forEach(function (reg) {
-    data = data.replace(reg, function (_, prefix, link, suffix) {
-      link = callback(link)      
+  ruleList.forEach(function (item) {
+    data = data.replace(item.reg, function (_, prefix, link, suffix) {
+      link = callback(item.name, link)
       return prefix + link + suffix
     })
   })
@@ -26,13 +41,13 @@ function urlFind (ruleList, data, callback) {
 
 
 module.exports = function (source) {
-  const options = _loaderUtils.getOptions(this) || {
+  var options = _loaderUtils.getOptions(this) || {
     config: {}
   }
   if(!options.mode) return source
 
-  const config = options.config
-  let useRule;
+  var config = options.config
+  var useRule, newUrl, reg;
   switch (options.mode) {
     case 'css':
       useRule = cssRules
@@ -43,14 +58,14 @@ module.exports = function (source) {
   }
   
 
-  source = urlFind(useRule, source, function (path) {
+  source = urlFind(useRule, source, function (ruleName, path) {
     for (var key in config) {
-      var regStr = new RegExp('^' + key + '(?=/|$)')
-      const newUrl = path.replace(regStr, config[key])
-      console.log("转换", path, '=>', newUrl)
+      reg = new RegExp('^' + key + '(?=/|$)')
+      newUrl = path.replace(reg, config[key]).replace(/^\/\//, '/')
+      console.log(`转换[${ruleName}] `, colorText.grey(path), '=>', colorText.green(newUrl))
       path = newUrl
     }
-    return path.replace(/^\/\//, '/')
+    return path
   })
   return source
 }
