@@ -19,7 +19,7 @@ config.module
     return {
       mode: "css",
       config: {
-        "/static": process.env.VUE_APP_ROUTER_BASE + "/static",
+        "/static": "/newFolder/image",
       },
     };
   })
@@ -34,7 +34,7 @@ config.module
     return {
       mode: "html",
       config: {
-        "/static": process.env.VUE_APP_ROUTER_BASE + "/static",
+        "/static": "/newFolder/image",
       },
     };
   })
