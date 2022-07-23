@@ -33,4 +33,7 @@ module.exports = {
   grey: function (text) {
     return colors.grey + text + endColor
   },
+  red: function (text) {
+    return colors.red + text + endColor
+  },
 }

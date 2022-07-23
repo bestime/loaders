@@ -1,6 +1,6 @@
 {
   "name": "@bestime/url-replace-loader",
-  "version": "1.0.5",
+  "version": "1.0.9",
   "main": "index.js",
   "description": "自定义url-replace-loader",
   "files": [

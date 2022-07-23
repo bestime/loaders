@@ -41,13 +41,15 @@ function urlFind (ruleList, data, callback) {
 
 
 module.exports = function (source) {
-  var options = _loaderUtils.getOptions(this) || {
-    config: {}
+  var options = _loaderUtils.getOptions(this)
+  if(!options.urlCallback) {
+    return source
   }
-  if(!options.mode) return source
+  
 
-  var config = options.config
-  var useRule, newUrl, reg;
+
+  var showLog = options.showLog === true
+  var useRule, newUrl;
   switch (options.mode) {
     case 'css':
       useRule = cssRules
@@ -57,14 +59,24 @@ module.exports = function (source) {
       break;
   }
   
+  // if(showLog) {
+  //   console.log("测试", options.mode,'=>', options)
+  // }
 
+  
   source = urlFind(useRule, source, function (ruleName, path) {
-    for (var key in config) {
-      reg = new RegExp('^' + key + '(?=/|$)')
-      newUrl = path.replace(reg, config[key]).replace(/^\/\//, '/')
-      console.log(`转换[${ruleName}] `, colorText.grey(path), '=>', colorText.green(newUrl))
-      path = newUrl
+    
+    newUrl = options.urlCallback(path)
+    
+    if(showLog) {
+      if(newUrl !== path) {
+        console.log(`转换[${ruleName}] `, colorText.red(path), '=>', colorText.green(newUrl))
+      } else {
+        console.log(`转换[${ruleName}] `, colorText.grey(path), '=>', colorText.grey(newUrl))
+      }      
     }
+
+    path = newUrl
     return path
   })
   return source
